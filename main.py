@@ -2,12 +2,12 @@ import tornado.ioloop
 import tornado.web
 import tornado.websocket
 
-from games.arkanoid import ArkanoidWebSocketHandler
+from games.pong import PongWebSocketHandler
 
 
 def make_app():
     return tornado.web.Application([
-        (r"/ws/arkanoid/", ArkanoidWebSocketHandler),
+        (r"/ws/pong/", PongWebSocketHandler), #http://localhost:8001/ws/pong/
     ])
 
 
