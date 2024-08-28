@@ -2,7 +2,7 @@ import tornado.ioloop
 import tornado.web
 import tornado.websocket
 
-from games.pong import PongWebSocketHandler
+from games.pong.pong import PongWebSocketHandler
 
 
 def make_app():
