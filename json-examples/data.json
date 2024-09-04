@@ -1,0 +1,38 @@
+{
+  "name": "pong",
+  "state": {
+    "leftPadleY": 225,
+    "rightPadleY": 225,
+    "leftPaddleSpeed": 0,
+    "rightPaddleSpeed": 0,
+    "ballX": 602,
+    "ballY": 215,
+    "ballSpeedX": 6,
+    "ballSpeedY": -5,
+    "ballSpeedMultiplier": 1,
+    "scoreLeft": 6,
+    "scoreRight": 3
+  },
+  "outputSpec": "\n    output:\n      leftPadleY: number, <0, 600>;\n      rightPadleY: number, <0, 600>;\n      leftPaddleSpeed: number, <-20, 20>;\n      rightPaddleSpeed: number, <-20, 20>;\n      ballX: number, <0, 1000>;\n      ballY: number, <0, 600>;\n      ballSpeedX: number, <-inf, inf>;\n      ballSpeedY: number, <-inf, inf>;\n      ballSpeedMultiplier: number, <1, inf>;\n      scoreLeft: number, <0, inf>;\n      scoreRight: number, <0, inf>;\n\n    default values:\n      ballX: 500;\n      ballY: 300;\n      leftPadleY: 250;\n      rightPadleY: 250;\n  ",
+  "players": [
+    {
+      "_inputData": { "move": 0 },
+      "_expectedDataDescription": "Value of {-1, 0, 1}, -1: down, 0: stop, 1: up",
+      "isObligatory": true,
+      "_name": "Player 1",
+      "id": 1,
+      "isActive": true,
+      "_playerType": "SOCKET"
+    },
+    {
+      "_inputData": { "move": 0 },
+      "_expectedDataDescription": "Value of {-1, 0, 1}, -1: down, 0: stop, 1: up",
+      "isObligatory": true,
+      "_name": "Player 2",
+      "id": 2,
+      "isActive": true,
+      "_playerType": "KEYBOARD"
+    }
+  ],
+  "timestamp": "2024-09-04T08:18:22.609Z"
+}
