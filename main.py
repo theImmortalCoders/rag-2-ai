@@ -1,27 +1,33 @@
+import gym
+from src.wrapper import StateStack
+import os
+from stable_baselines3 import DQN
+from src.handlers import AiHandler
+from src.bot import PongBot
+from src.socket import run_socket
 import threading
-
-import tornado.ioloop
-import tornado.web
-import tornado.websocket
-
-from games.pong.pong import PongGesturesHandler, PongBotHandler, PongRandomHandler
-from games.pong.models.pong_gestures import start_gesture_recognition
+from src.enjoy import enjoy
 
 
-def define_sockets():
-    return tornado.web.Application([
-        (r"/ws/pong/", PongGesturesHandler),  # http://localhost:8001/ws/pong/
-        (r"/ws/pong-bot/", PongBotHandler),  # http://localhost:8001/ws/pong-bot/
-        (r"/ws/pong-random/", PongRandomHandler),  # http://localhost:8001/ws/pong-random/
-    ])
+def main():
+    env = gym.make('rag-2-ai/WebsocketPong-v0')
+    env = StateStack(env, history_length=3)
+    path = os.path.join(
+        'trained-agents',
+        'dqn',
+        'WebsocketPong-v0',
+        'WebsocketPong_200000_steps.zip'
+    )
+    model = DQN.load(path=path, env=env)
+    routes = [
+        (r"/ws/pong/", AiHandler, dict(env=env)),
+        (r"/ws/pong-bot/", PongBot)
+    ]
+    socket_thread = threading.Thread(target=run_socket, args=(8001, routes))
+    socket_thread.start()
+    env.connection_event.wait()
+    enjoy(model=model, env=env)
 
 
-if __name__ == "__main__":
-    app = define_sockets()
-    app.listen(8001)
-    
-    gest_thread = threading.Thread(target=start_gesture_recognition)
-    gest_thread.start()
-    
-    tornado.ioloop.IOLoop.current().start()
-    print("Started socket")
+if __name__ == '__main__':
+    main()
