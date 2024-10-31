@@ -1,8 +1,9 @@
+import logging
+from threading import Event
+
 import numpy as np
 from gym import Env
 from gym.spaces import Box, Discrete
-from threading import Event
-import logging
 
 logging.basicConfig(level=logging.WARNING, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -59,7 +60,7 @@ class WebsocketPong(Env):
             curr_observation = np.array([
                 self.state['rightPaddleY'],
                 self.state['leftPaddleY'],
-                1000-self.state['ballX'],
+                1000 - self.state['ballX'],
                 self.state['ballY'],
                 -self.state['ballSpeedX'],
                 self.state['ballSpeedY'],

@@ -1,12 +1,14 @@
-import gym
-from src.wrapper import StateStack
 import os
-from stable_baselines3 import DQN
-from src.handlers import AiHandler
-from src.bot import PongBot
-from src.socket import run_socket
 import threading
+
+import gym
+from stable_baselines3 import DQN
+
+from src.bot import PongBot
 from src.enjoy import enjoy
+from src.handlers import AiHandler
+from src.socket import run_socket
+from src.wrapper import StateStack
 
 
 def main():

@@ -1,6 +1,7 @@
-from tornado.web import Application
-import tornado.ioloop
 from typing import List, Tuple, Type
+
+import tornado.ioloop
+from tornado.web import Application
 
 
 def make_app(routes: List[Tuple[str, Type, dict]]) -> Application:

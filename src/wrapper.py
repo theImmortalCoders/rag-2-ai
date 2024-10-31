@@ -1,8 +1,9 @@
-from gym import Wrapper
-from gym import Env
-from gym.spaces import Box
 from collections import deque
+
 import numpy as np
+from gym import Env
+from gym import Wrapper
+from gym.spaces import Box
 
 
 class StateStack(Wrapper):
