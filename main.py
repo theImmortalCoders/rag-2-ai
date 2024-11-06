@@ -21,14 +21,20 @@ def main():
         'WebsocketPong_200000_steps.zip'
     )
     model = DQN.load(path=path, env=env)
+
+    launch_socket(env)
+
+    env.connection_event.wait()
+    enjoy(model=model, env=env)
+
+
+def launch_socket(env):
     routes = [
         (r"/ws/pong/", AiHandler, dict(env=env)),
         (r"/ws/pong-bot/", PongBot)
     ]
     socket_thread = threading.Thread(target=run_socket, args=(8001, routes))
     socket_thread.start()
-    env.connection_event.wait()
-    enjoy(model=model, env=env)
 
 
 if __name__ == '__main__':
