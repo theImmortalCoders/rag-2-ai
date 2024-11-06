@@ -1,5 +1,6 @@
 import json
 import os
+import socket
 from urllib.parse import parse_qs, urlparse
 
 import requests
@@ -10,8 +11,8 @@ from tornado.websocket import WebSocketHandler
 def verify_jwt(token):
     load_dotenv()
     TOKEN_VERIFY_URL = os.getenv('TOKEN_VERIFY_URL')
-
     headers = {"Authorization": "Bearer " + token}
+    
     try:
         response = requests.get(TOKEN_VERIFY_URL, headers=headers)
         print(response)
@@ -31,7 +32,7 @@ class BaseHandler(WebSocketHandler):
         token = query_params.get("jwt", [None])[0]
 
         if not token or not verify_jwt(token):
-            self.close(code=403, reason="Unauthorized")
+            self.close(code=401, reason="Unauthorized")
             return
         print("WebSocket connection opened and authenticated")
 

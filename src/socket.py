@@ -5,7 +5,7 @@ from tornado.web import Application
 
 
 def make_app(routes: List[Tuple[str, Type, dict]]) -> Application:
-    return Application(routes)
+    return Application(routes, websocket_ping_interval=10, websocket_ping_timeout=30, )
 
 
 def run_socket(port: int, routes: List[Tuple[str, Type, dict]]) -> None:
