@@ -14,7 +14,7 @@ def verify_jwt(token):
     headers = {"Authorization": "Bearer " + token}
     
     try:
-        response = requests.get(TOKEN_VERIFY_URL, headers=headers)
+        response = requests.get(TOKEN_VERIFY_URL, headers=headers, timeout=2)
         print(response)
         return response.status_code == 200
     except requests.RequestException as e:
