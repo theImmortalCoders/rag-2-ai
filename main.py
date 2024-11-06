@@ -7,6 +7,7 @@ from stable_baselines3 import DQN
 from src.bot import PongBot
 from src.enjoy import enjoy
 from src.handlers import AiHandler
+from src.routes import RoutesHandler
 from src.socket import run_socket
 from src.wrapper import StateStack
 
@@ -21,14 +22,25 @@ def main():
         'WebsocketPong_200000_steps.zip'
     )
     model = DQN.load(path=path, env=env)
-    routes = [
-        (r"/ws/pong/", AiHandler, dict(env=env)),
-        (r"/ws/pong-bot/", PongBot)
-    ]
-    socket_thread = threading.Thread(target=run_socket, args=(8001, routes))
-    socket_thread.start()
+
+    launch_socket(env)
+
     env.connection_event.wait()
     enjoy(model=model, env=env)
+
+
+def launch_socket(env):
+    routes = [
+        (r"/ws/pong/", AiHandler, dict(env=env)),
+        (r"/ws/pong-bot/", PongBot),
+    ]
+
+    print("Routes: ", routes)
+
+    routes.append((r"/ws/routes/", RoutesHandler, dict(routes=routes)))
+
+    socket_thread = threading.Thread(target=run_socket, args=(8001, routes))
+    socket_thread.start()
 
 
 if __name__ == '__main__':
