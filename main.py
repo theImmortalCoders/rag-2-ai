@@ -1,46 +1,33 @@
 import os
-import threading
 
-import gym
 from stable_baselines3 import DQN
-
+from src.env_sim.web_pong import prepare_pong_obs
 from src.bot import PongBot
-from src.enjoy import enjoy
-from src.handlers import AiHandler
-from src.routes import RoutesHandler
+from src.handlers import AiHandler, RoutesHandler
 from src.socket import run_socket
-from src.wrapper import StateStack
 
 
 def main():
-    env = gym.make('rag-2-ai/WebsocketPong-v0')
-    env = StateStack(env, history_length=3)
     path = os.path.join(
         'trained-agents',
         'dqn',
         'WebsocketPong-v0',
         'WebsocketPong_200000_steps.zip'
     )
-    model = DQN.load(path=path, env=env)
-
-    launch_socket(env)
-
-    env.connection_event.wait()
-    enjoy(model=model, env=env)
-
-
-def launch_socket(env):
+    model = DQN.load(path=path)
     routes = [
-        (r"/ws/pong/", AiHandler, dict(env=env)),
+        (r"/ws/pong/", AiHandler, dict(
+            model=model,
+            obs_funct=prepare_pong_obs,
+            move_first=-1,
+            move_last=1,
+            history_length=3
+        )),
         (r"/ws/pong-bot/", PongBot),
     ]
-
-    print("Routes: ", routes)
-
-    routes.append((r"/ws/routes/", RoutesHandler, dict(routes=routes)))
-
-    socket_thread = threading.Thread(target=run_socket, args=(8001, routes))
-    socket_thread.start()
+    endpoint = (r"/ws/routes/", RoutesHandler, dict(routes=routes))
+    routes.append(endpoint)
+    run_socket(port=8001, routes=routes)
 
 
 if __name__ == '__main__':
