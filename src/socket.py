@@ -11,4 +11,9 @@ def make_app(routes: List[Tuple[str, Type, dict]]) -> Application:
 def run_socket(port: int, routes: List[Tuple[str, Type, dict]]) -> None:
     app = make_app(routes)
     app.listen(port)
-    tornado.ioloop.IOLoop.current().start()
+    try:
+        tornado.ioloop.IOLoop.current().start()
+    except KeyboardInterrupt:
+        print("Server stopped.")
+    finally:
+        tornado.ioloop.IOLoop.current().stop()
