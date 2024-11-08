@@ -89,6 +89,17 @@ class AiHandler(BaseHandler):
 
 
 class RoutesHandler(RequestHandler):
+    def set_default_headers(self):
+        load_dotenv()
+        self.set_header("Access-Control-Allow-Origin", os.getenv("ALLOWED_ORIGINS"))
+        self.set_header("Access-Control-Allow-Credentials", "true")
+        self.set_header("Access-Control-Allow-Headers", "x-requested-with, Authorization")
+        self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
+
+    def options(self):
+        self.set_status(204)
+        self.finish()
+
     def initialize(self, routes: List[Tuple[str, Type, dict]]):
         self.routes = routes
 
