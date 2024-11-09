@@ -22,7 +22,7 @@ def define_routes() -> List[Tuple[str, Type, dict]]:
 
     # Define routes
     routes = [
-        (r"/ws/pong/", AiHandler, dict(
+        (r"/ws/pong-dqn/", AiHandler, dict(
             model=dqn_pong,
             obs_funct=prepare_pong_obs,
             move_first=-1,
