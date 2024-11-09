@@ -67,7 +67,7 @@ class AiHandler(BaseHandler):
         self.move_first = move_first
         self.move_last = move_last
 
-        self.algo = type(model).__name__
+        # self.algo = type(model).__name__
 
     def on_close(self):
         self.states.clear()
@@ -106,5 +106,5 @@ class RoutesHandler(RequestHandler):
         self.routes = routes
 
     def get(self):
-        routes_info = [{"path": route[0], "name": getattr(route[1], 'algo', "Undefined")} for route in self.routes]
+        routes_info = [{"path": route[0], "name": route[1].__name__} for route in self.routes]
         self.write(json.dumps(routes_info))
