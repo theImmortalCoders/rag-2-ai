@@ -22,14 +22,14 @@ def define_routes() -> List[Tuple[str, Type, dict]]:
 
     # Define routes
     routes = [
-        (r"/ws/pong-dqn/", AiHandler, dict(
+        (r"/ws/pong/pong-dqn/", AiHandler, dict(
             model=dqn_pong,
             obs_funct=prepare_pong_obs,
             move_first=-1,
             move_last=1,
             history_length=3
         )),
-        (r"/ws/pong-bot/", PongBot),
+        (r"/ws/pong/pong-bot/", PongBot),
     ]
     pong_endpoint = (r"/ws/pong/routes/", RoutesHandler, dict(routes=routes))
     routes.append(pong_endpoint)
