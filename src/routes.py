@@ -31,7 +31,7 @@ def define_routes() -> List[Tuple[str, Type, dict]]:
         )),
         (r"/ws/pong-bot/", PongBot),
     ]
-    endpoint = (r"/ws/routes/", RoutesHandler, dict(routes=routes))
-    routes.append(endpoint)
+    pong_endpoint = (r"/ws/pong/routes/", RoutesHandler, dict(routes=routes))
+    routes.append(pong_endpoint)
 
     return routes
