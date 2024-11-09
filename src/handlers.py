@@ -106,5 +106,5 @@ class RoutesHandler(RequestHandler):
         self.routes = routes
 
     def get(self):
-        routes_info = [{"path": route[0], "name": getattr(route[1], 'algo', "BOT")} for route in self.routes]
+        routes_info = [{"path": route[0], "name": getattr(route[1], 'algo', "Undefined")} for route in self.routes]
         self.write(json.dumps(routes_info))
