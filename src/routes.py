@@ -21,7 +21,8 @@ def define_routes() -> List[Tuple[str, Type, dict]]:
     dqn_pong = DQN.load(path=dqn_pong_path)
 
     # Define routes
-    routes = [
+    routes = []
+    game_routes = [
         (r"/ws/pong/pong-dqn/", AiHandler, dict(
             model=dqn_pong,
             obs_funct=prepare_pong_obs,
@@ -31,7 +32,9 @@ def define_routes() -> List[Tuple[str, Type, dict]]:
         )),
         (r"/ws/pong/pong-bot/", PongBot),
     ]
-    pong_endpoint = (r"/ws/pong/routes/", RoutesHandler, dict(routes=routes))
+    pong_endpoint = (r"/ws/pong/routes/", RoutesHandler, dict(routes=game_routes))
+    
+    routes += game_routes
     routes.append(pong_endpoint)
 
     return routes
