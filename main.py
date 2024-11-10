@@ -1,4 +1,4 @@
-from src.routes import define_routes
+from scripts.define_routes import define_routes
 from src.socket import run_socket
 
 
