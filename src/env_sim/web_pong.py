@@ -21,9 +21,9 @@ def prepare_pong_obs(data: dict) -> np.array:
         curr_observation = np.array([
             state['rightPaddleY'],
             state['leftPaddleY'],
-            state['ballX'],
+            1000 - state['ballX'],
             state['ballY'],
-            state['ballSpeedX'],
+            -state['ballSpeedX'],
             state['ballSpeedY'],
         ], dtype=np.float32)
 
