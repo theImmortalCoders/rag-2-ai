@@ -104,5 +104,19 @@ class RoutesHandler(RequestHandler):
         self.routes = routes
 
     def get(self):
-        routes_info = [{"path": route[0], "name": route[1].__name__} for route in self.routes]
+        routes_info = []
+        for route in self.routes:
+            path = route[0][:-1]
+            last_dash_index = path.rfind('-')
+            last_slash_index = path.rfind('/')
+            last_index = max(last_dash_index, last_slash_index)
+
+            if last_index != -1:
+                url_type = path[last_index + 1:].upper()
+            else:
+                url_type = path.upper()
+
+            routes_info.append({"path": route[0], "name": url_type})
+
         self.write(json.dumps(routes_info))
+
