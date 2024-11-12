@@ -91,10 +91,17 @@ class AiHandler(BaseHandler):
 class RoutesHandler(RequestHandler):
     def set_default_headers(self):
         load_dotenv()
-        self.set_header("Access-Control-Allow-Origin", os.getenv("ALLOWED_ORIGINS"))
+        allowed_origins = os.getenv("ALLOWED_ORIGINS").split(',')
+        
+        origin = self.request.headers.get("Origin")
+        if origin in allowed_origins:
+            self.set_header("Access-Control-Allow-Origin", origin)
+        else:
+            self.set_header("Access-Control-Allow-Origin", "null")
+        
         self.set_header("Access-Control-Allow-Credentials", "true")
         self.set_header("Access-Control-Allow-Headers", "x-requested-with, Authorization")
-        self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
+        self.set_header("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
 
     def options(self):
         self.set_status(204)
