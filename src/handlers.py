@@ -89,9 +89,34 @@ class AiHandler(BaseHandler):
 
 
 class RoutesHandler(RequestHandler):
+    def set_default_headers(self):
+        load_dotenv()
+        self.set_header("Access-Control-Allow-Origin", os.getenv("ALLOWED_ORIGINS"))
+        self.set_header("Access-Control-Allow-Credentials", "true")
+        self.set_header("Access-Control-Allow-Headers", "x-requested-with, Authorization")
+        self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
+
+    def options(self):
+        self.set_status(204)
+        self.finish()
+
     def initialize(self, routes: List[Tuple[str, Type, dict]]):
         self.routes = routes
 
     def get(self):
-        routes_info = [{"path": route[0], "name": route[1].__name__} for route in self.routes]
+        routes_info = []
+        for route in self.routes:
+            path = route[0][:-1]
+            last_dash_index = path.rfind('-')
+            last_slash_index = path.rfind('/')
+            last_index = max(last_dash_index, last_slash_index)
+
+            if last_index != -1:
+                url_type = path[last_index + 1:].upper()
+            else:
+                url_type = path.upper()
+
+            routes_info.append({"path": route[0], "name": url_type})
+
         self.write(json.dumps(routes_info))
+
