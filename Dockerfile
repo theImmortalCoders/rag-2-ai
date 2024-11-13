@@ -8,7 +8,7 @@ RUN python -m venv /venv
 ENV PATH="/venv/bin:$PATH"
 
 RUN python -m pip install pip==21.1.2
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY "/" .
 

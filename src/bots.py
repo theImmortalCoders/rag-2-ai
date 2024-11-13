@@ -4,7 +4,6 @@ from src.handlers import BaseHandler
 
 
 class PongBot(BaseHandler):
-
     def on_message(self, message):
         data = json.loads(message)
 
