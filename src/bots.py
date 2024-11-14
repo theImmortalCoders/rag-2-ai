@@ -18,4 +18,4 @@ class PongBot(BaseHandler):
             else:
                 move = -1
 
-        self.write_message(json.dumps({'move': move}))
+        self.write_message(json.dumps({'move': move, 'start': 1}))
