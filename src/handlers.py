@@ -85,7 +85,7 @@ class AiHandler(BaseHandler):
             last=self.move_last
         )
         if move is not None:
-            self.write_message(json.dumps({'move': move}))
+            self.write_message(json.dumps({'move': move, 'start': 1}))
 
 
 class RoutesHandler(RequestHandler):
