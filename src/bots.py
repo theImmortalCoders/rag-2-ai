@@ -4,7 +4,7 @@ from src.handlers import BaseHandler
 
 
 class PongBot(BaseHandler):
-    def on_message(self, message):
+    def send_message(self, message):
         data = json.loads(message)
 
         if data['playerId'] == 0:
