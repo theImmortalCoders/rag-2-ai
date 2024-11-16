@@ -28,11 +28,10 @@ class AiHandler(BaseHandler):
         self.move_first = move_first
         self.move_last = move_last
 
-    def on_close(self):
-        super().on_close()
+    def after_close(self):
         self.states.clear()
 
-    def on_message(self, message):
+    def send_message(self, message):
         data = json.loads(message)
         obs = self.prepare_obs(data)
         obs = state_stack(obs=obs, states=self.states)

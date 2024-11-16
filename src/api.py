@@ -1,6 +1,8 @@
 import json
 import os
-from typing import List, Tuple, Type
+import time
+from abc import abstractmethod
+from typing import List, Tuple, Type, final
 from urllib.parse import urlparse, parse_qs
 
 import requests
@@ -27,10 +29,20 @@ def verify_jwt(token):
 
 class BaseHandler(WebSocketHandler):
     is_guest = False
-
+    last_message_time = None
+    
+    @final
     def check_origin(self, origin):
-        return True
+        load_dotenv()
+        allowed_origins = os.getenv('ALLOWED_ORIGINS')
 
+        allowed_origins_list = allowed_origins.split(',')
+        if origin in allowed_origins_list:
+            return True
+        print(f"Origin {origin} not allowed")
+        return False
+
+    @final
     def open(self):
         global guest_users
 
@@ -48,21 +60,33 @@ class BaseHandler(WebSocketHandler):
             self.is_guest = True
             print("WebSocket connection opened as guest")
         else:
-            print("WebSocket connection opened and authenticated")
+            self.is_guest = False
+            print("WebSocket connection opened as authenticated")
 
-    def on_close(self):  # always call when overload
+    @final
+    def on_close(self):
         global guest_users
 
         if self.is_guest:
             guest_users -= 1
             print(f"Guest user disconnected. Remaining guest users: {guest_users}")
         else:
-            print("Authenticated user disconnected")
-
-        print("WebSocket connection closed")
-
-    def on_message(self, message):
+            print("User disconnected")
+        
+        self.after_close()
+        
+    def after_close(self):
         pass
+
+    @final
+    def on_message(self, message): #do not override
+        if self.last_message_time is None or time.time() - self.last_message_time >= 0.045:
+            self.last_message_time = time.time()
+            self.send_message(message)
+
+    @abstractmethod
+    def send_message(self, message):
+        raise NotImplementedError
 
 
 class RoutesHandler(RequestHandler):
