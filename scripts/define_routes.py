@@ -2,9 +2,11 @@ import os
 
 from typing import List, Tuple, Type
 from stable_baselines3 import DQN, PPO
+
+from src.api import RoutesHandler
 from src.env_sim.web_pong import prepare_pong_obs
 from src.bots import PongBot
-from src.handlers import AiHandler, RoutesHandler
+from src.handlers import AiHandler
 
 
 def define_routes() -> List[Tuple[str, Type, dict]]:
