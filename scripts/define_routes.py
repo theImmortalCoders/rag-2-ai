@@ -5,7 +5,7 @@ from stable_baselines3 import DQN, PPO
 
 from src.api import RoutesHandler
 from src.env_sim.web_pong import prepare_pong_obs
-from src.bots import PongBot
+from src.bots import PongBot, FlappybirdBot
 from src.handlers import AiHandler
 
 
@@ -29,7 +29,7 @@ def define_routes() -> List[Tuple[str, Type, dict]]:
     ppo_pong = PPO.load(path=ppo_pong_path)
 
     routes = []
-    game_routes = [
+    pong_routes = [
         (r"/ws/pong/pong-dqn/", AiHandler, dict(
             model=dqn_pong,
             obs_funct=prepare_pong_obs,
@@ -46,9 +46,16 @@ def define_routes() -> List[Tuple[str, Type, dict]]:
         )),
         (r"/ws/pong/pong-bot/", PongBot),
     ]
-    pong_endpoint = (r"/ws/pong/routes/", RoutesHandler, dict(routes=game_routes))
+    flappybird_routes = [
+        (r"/ws/flappybird/flappybird-bot/", FlappybirdBot),
+    ]
     
-    routes += game_routes
+    flappybird_endpoint = (r"/ws/flappybird/routes/", RoutesHandler, dict(routes=flappybird_routes))
+    pong_endpoint = (r"/ws/pong/routes/", RoutesHandler, dict(routes=pong_routes))
+    
+    routes += pong_routes
+    routes += flappybird_routes
+    routes.append(flappybird_endpoint)
     routes.append(pong_endpoint)
 
     return routes
