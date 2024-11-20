@@ -50,13 +50,13 @@ class SkijumpBot(BaseHandler):
         up = 0
         down = 0
         
-        if not state['isMoving'] and not state['isLanded'] and not state['isCrashed']:
+        if not state['isMoving'] or state['jumperHeightAboveGround'] < 10:
             space = 1
         else:
-            if abs(state['jumperX'] - 250) < 20:
+            if abs(state['jumperX'] - 250) < 12:
                 space = 1
             
-        # if state['jumperInclineRad']
-        
+        if state['jumperInclineRad'] < 0.7:
+                up = 1
 
         self.write_message(json.dumps({'space': space, 'up': up, 'down': down}))
