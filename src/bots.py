@@ -1,8 +1,4 @@
 import json
-import random
-from turtledemo.chaos import jumpto
-
-from six import moves
 
 from src.handlers import BaseHandler
 
@@ -45,3 +41,22 @@ class FlappybirdBot(BaseHandler):
                 jump = 1
 
         self.write_message(json.dumps({'jump': jump}))
+
+class SkijumpBot(BaseHandler):
+    def send_message(self, message):
+        state = json.loads(message)['state']
+        
+        space = 0
+        up = 0
+        down = 0
+        
+        if not state['isMoving'] and not state['isLanded'] and not state['isCrashed']:
+            space = 1
+        else:
+            if abs(state['jumperX'] - 250) < 20:
+                space = 1
+            
+        # if state['jumperInclineRad']
+        
+
+        self.write_message(json.dumps({'space': space, 'up': up, 'down': down}))
