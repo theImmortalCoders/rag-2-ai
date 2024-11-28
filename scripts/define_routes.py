@@ -1,7 +1,7 @@
 import os
 
 from typing import List, Tuple, Type
-from stable_baselines3 import DQN, PPO
+from stable_baselines3 import DQN, PPO, A2C
 
 from src.api import RoutesHandler
 from src.env_sim.web_pong import prepare_pong_obs
@@ -13,6 +13,7 @@ def define_routes() -> List[Tuple[str, Type, dict]]:
 
     dqn_path = os.path.join('trained-agents', 'dqn')
     ppo_path = os.path.join('trained-agents', 'ppo')
+    a2c_path = os.path.join('trained-agents', 'a2c')
 
     dqn_pong_path = os.path.join(
         dqn_path,
@@ -28,6 +29,13 @@ def define_routes() -> List[Tuple[str, Type, dict]]:
     )
     ppo_pong = PPO.load(path=ppo_pong_path)
 
+    a2c_pong_path = os.path.join(
+        a2c_path,
+        'WebsocketPong-v0',
+        'WebsocketPong-v0_200000_steps.zip'
+    )
+    a2c_pong = A2C.load(path=a2c_pong_path)
+
     routes = []
     pong_routes = [
         (r"/ws/pong/pong-dqn/", AiHandler, dict(
@@ -39,6 +47,13 @@ def define_routes() -> List[Tuple[str, Type, dict]]:
         )),
         (r"/ws/pong/pong-ppo/", AiHandler, dict(
             model=ppo_pong,
+            obs_funct=prepare_pong_obs,
+            move_first=-1,
+            move_last=1,
+            history_length=3
+        )),
+        (r"/ws/pong/pong-a2c/", AiHandler, dict(
+            model=a2c_pong,
             obs_funct=prepare_pong_obs,
             move_first=-1,
             move_last=1,
