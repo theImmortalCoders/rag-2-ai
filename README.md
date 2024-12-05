@@ -2,7 +2,7 @@
 
 ## Disclaimer
 
-This repository is no longer maitained. The latest version of the project is available on [https://github.com/KN-GEST-ongit/rag-2-ai](https://github.com/KN-GEST-ongit/rag-2-ai)
+This repository is no longer maintained. The latest version of the project is available on [https://github.com/KN-GEST-ongit/rag-2-ai](https://github.com/KN-GEST-ongit/rag-2-ai)
 
 ## License
 
